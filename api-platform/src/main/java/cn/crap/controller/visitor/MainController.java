@@ -10,7 +10,6 @@ import cn.crap.framework.base.BaseController;
 import cn.crap.model.HotSearch;
 import cn.crap.query.ArticleQuery;
 import cn.crap.query.SearchQuery;
-import cn.crap.schedule.OpenSourceInfoTask;
 import cn.crap.schedule.TaskUtil;
 import cn.crap.service.*;
 import cn.crap.service.tool.LuceneSearchService;
@@ -62,7 +61,7 @@ public class MainController extends BaseController{
 
     /**
 	 * 默认页面，重定向web.do，不直接进入web.do是因为进入默认地址，浏览器中的href不会改变， 会导致用户第一点击闪屏
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@RequestMapping("/home.do")
@@ -76,7 +75,7 @@ public class MainController extends BaseController{
 			return dashboard(modelMap);
 		}
 	}
-	
+
 	/**
 	 * 前端主页面
 	 * @return
@@ -123,8 +122,6 @@ public class MainController extends BaseController{
 		modelMap.addAttribute("menuList", menuList);
 
 		// fork & star 数量
-		modelMap.addAttribute(FORK_NUM, OpenSourceInfoTask.forNumStr);
-		modelMap.addAttribute(STAR_NUM, OpenSourceInfoTask.starNumStr);
 		return "WEB-INF/views/plugDashboard.jsp";
 	}
 
@@ -163,10 +160,6 @@ public class MainController extends BaseController{
         modelMap.addAttribute("menuList", menuList);
 
         // fork & star 数量
-		TaskUtil.execute(new OpenSourceInfoTask());
-		modelMap.addAttribute(FORK_NUM, OpenSourceInfoTask.forNumStr);
-		modelMap.addAttribute(STAR_NUM, OpenSourceInfoTask.starNumStr);
-
         return "WEB-INF/views/dashboard.jsp";
     }
 
@@ -183,10 +176,10 @@ public class MainController extends BaseController{
 		request.setAttribute("result", result);
 		return "WEB-INF/views/result.jsp";
 	}
-	
+
 	/**
 	 * 前端项目主页
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -194,7 +187,7 @@ public class MainController extends BaseController{
 	public String project() throws Exception {
 		return "resources/html/visitor/projectIndex.html";
 	}
-	
+
 	@RequestMapping("/searchList.do")
 	@ResponseBody
 	public void searchList(HttpServletResponse response) throws Exception {
@@ -219,16 +212,16 @@ public class MainController extends BaseController{
 				searchWord = LuceneSearchService.handleHref(searchWord);
 				sb.append( "<a onclick=\"iClose('lookUp');\" class='p3 pl10 dis "+ itemClass +"' href='#/visitorSearch?keyword="+searchWord+"'>"+showText+"</a>");
 			}
-			
+
 		}
 		sb.append("</div>");
 		printMsg(sb.toString());
-		
+
 	}
 
 	/**
 	 * 初始化前端页面
-	 * 
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/visitor/init.do")
@@ -243,14 +236,14 @@ public class MainController extends BaseController{
 			menus = customMenuService.getMenu();
 			objectCache.add(C_CACHE_MENU, menus);
 		}
-		
+
 		returnMap.put("menuList", menus);
 		LoginInfoDto user = LoginUserHelper.tryGetUser();
 
 		returnMap.put("sessionAdminName", user == null? "": user.getUserName());
 		return new JsonResult(1, returnMap);
 	}
-	
+
 
 	@RequestMapping("/search.do")
 	@ResponseBody
@@ -295,7 +288,7 @@ public class MainController extends BaseController{
         }
 
         Page page = new Page(query);
-		return new JsonResult(1, returnMap, page, 
+		return new JsonResult(1, returnMap, page,
 				Tools.getMap("crumbs", Tools.getCrumbs("搜索关键词:"+ keyword,"void")));
 	}
 }
