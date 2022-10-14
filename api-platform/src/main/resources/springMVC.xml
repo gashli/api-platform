@@ -14,12 +14,12 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 
 
-        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	<!--注解扫描范围 -->
 	<context:annotation-config />
 	<mvc:annotation-driven/>
-	<aop:aspectj-autoproxy proxy-target-class="true"/> 
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
 	<!-- 采用注解的方式配置，在部分操作系统或tomcat中由于初始化顺序不一致，会报错 -->
 	<!-- 必须放在component-scan之上，优先创建该bean -->
 	<bean class="cn.crap.framework.SpringContextHolder" />
@@ -28,7 +28,7 @@
 	<import resource="monitor.xml" /> -->
 	<!-- <import resource="mongo.xml" /> -->
 	<import resource="mybatis-dao.xml" />
-	
+
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<value>classpath:config.properties</value>
@@ -36,18 +36,18 @@
 		<property name="fileEncoding" value="utf-8"/>
 	</bean>
 
-	
+
 	<mvc:interceptors>
 		<!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
 		<!-- 如果不定义 mvc:mapping path 将拦截所有的URL请求 -->
 		<bean class="cn.crap.framework.interceptor.AuthInterceptor"></bean>
 	</mvc:interceptors>
-	
+
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
 	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<util:list id="beanList">
 				<ref bean="mappingJacksonHttpMessageConverter" />
@@ -66,21 +66,21 @@
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/"></property>
 		<!-- <property name="suffix" value=".jsp"></property> -->
-	</bean> 
+	</bean>
 
- 	<!-- 支持上传文件 -->  
+ 	<!-- 支持上传文件 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
-    
+
     <!-- 邮件类 -->
     <bean id="mailSenderService" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="username"><value>${mail.username}</value></property>  
-        <property name="password"><value>${mail.password}</value></property>  
+        <property name="username"><value>${mail.username}</value></property>
+        <property name="password"><value>${mail.password}</value></property>
         <property name="host"><value>${mail.host}</value></property>
 		<property name="port"><value>465</value></property>
 
 		<!-- TODO mail.transport.protocol smtp-->
-        <property name="javaMailProperties">  
-            <props>  
+        <property name="javaMailProperties">
+            <props>
                 <prop key="mail.smtp.auth">false</prop>
 				<prop key="mail.smtp.writetimeout">3000</prop>
 				<prop key="mail.smtp.timeout">3000</prop>
@@ -98,7 +98,7 @@
 				<prop key="mail.imap.timeout">3000</prop>
 				<prop key="mail.imap.connectiontimeout">3000</prop>
 
-            </props>  
-        </property>  
-	</bean> 
+            </props>
+        </property>
+	</bean>
 </beans>
